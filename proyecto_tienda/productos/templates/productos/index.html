@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+
+{%block title%}Productos{% endblock %}
+
+{%block content%}
+<header class="text-center">
+    <h1>Lista de Productos</h1>
+</header>    
+    <nav>
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'ofertas:index' %}">Ir a Ofertas</a>
+    </nav>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>PRECIO</th>
+                    <th>CATEGORIA</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                    <tr>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.precio }}</td>
+                        <td>{{ producto.categoria.nombre }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">
+                            <h4>No hay productos</h4>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+    {% endblock %}
+   

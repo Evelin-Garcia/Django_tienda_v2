@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+
+{%block title%}Ofertas{% endblock %}
+
+{% block content %}
+<header class="text-center">
+    <h1>OFERTAS</h1>
+</header>    
+<p class="lead text-center">Consulta nuestras últimas ofertas en la tienda.</p>
+<!--    <p>¿Hay una oferta especial? {{is_special_offer|yesno:"Sí,No"}}</p> se comentó en views también-->
+<p>Fecha de hoy: {{ current_date|date:"d-m-Y" }}</p>
+{% if error%}
+    <div class="alert alert-danger">{{error}}</div>
+{% endif %}
+{% if ofertas %}
+<div class="container">
+    <h2>Productos en Oferta</h2>
+    <table >
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio Original</th>
+                <th>Descuento (%)</th>
+                <th>Precio con Descuento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for oferta in ofertas %}
+                <tr>
+                    <td>{{ oferta.producto.nombre }}</td>
+                    <td>$ {{ oferta.producto.precio|floatformat:1 }}</td>
+                    <td>{{ oferta.porcentaje_descuento }}%</td>
+                    <td>$ {{ oferta.precio_oferta|floatformat:1 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No hay ofertas disponibles actualmente</p>
+{% endif %}
+</div>
+{% endblock %}
