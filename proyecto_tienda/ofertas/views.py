@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Oferta
 from .forms import OfertaForm
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
 
 
 # Create your views here.
@@ -45,18 +46,27 @@ def crear_oferta(request):
         form=OfertaForm()
     return render(request, 'ofertas/crear_oferta.html', {'form':form})
 
+#se agregó el decorador de add_oferta al change_oferta para crear o modificar ofertas
 @login_required()
 @permission_required('ofertas.change_oferta', raise_exception=True)
-def editar_oferta(request, oferta_id):
-    oferta= get_object_or_404(Oferta, id=oferta_id)
+@permission_required('ofertas.add_oferta', raise_exception=True)
+def crear_o_editar_oferta(request, oferta_id=None):
+    oferta= get_object_or_404(Oferta, id=oferta_id) if oferta_id else None
+        
     if request.method == 'POST':
         form=OfertaForm(request.POST, instance=oferta)
         if form.is_valid():
             form.save()
+            if oferta:
+                messages.success(request, 'La oferta ha sido actualizada con éxito!')
+            else:
+                messages.success(request, 'La oferta ha sido creada con éxito!')
             return redirect('ofertas:index')
     else:
-        form=OfertaForm(instance=oferta)    
-    return render(request, 'ofertas/crear_oferta.html', {'form':form}) #Crear html de editar oferta y de eliminar oferta
+        form=OfertaForm(instance=oferta)
+        context={'form':form,
+                 'es_editar': oferta is not None}    
+    return render(request, 'ofertas/crear_oferta.html', context) 
 
 @login_required()
 @permission_required('ofertas.delete_oferta', raise_exception=True)

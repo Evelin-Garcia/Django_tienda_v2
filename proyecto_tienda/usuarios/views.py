@@ -3,7 +3,6 @@ from django.contrib.auth.models import User, Group
 from .forms import RegistroForm
 
 # Create your views here.
-
 def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
@@ -12,7 +11,7 @@ def registro(request):
             user.set_password(form.cleaned_data['password'])
             user.save()
             
-            #asignar el grupo comun al nuevo usuario
+            #asignación del nuevo usuario al grupo comun
             grupo_usuario_comun = Group.objects.get(name='Usuario_comun')
             user.groups.add(grupo_usuario_comun)
             return redirect('login')
