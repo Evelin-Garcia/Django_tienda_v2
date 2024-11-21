@@ -26,4 +26,5 @@ urlpatterns = [
     path('usuarios/', include(('usuarios.urls', 'usuarios'), namespace='usuarios')),
     path('', views.index, name='index'),
     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    path('ordenes/', include(('ordenes.urls', 'ordenes'), namespace='ordenes')),
 ]
